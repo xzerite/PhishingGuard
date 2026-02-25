@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+
+        :root {
+            --bg: #060b18;
+            --card: #111827;
+            --card2: #1a2236;
+            --border: rgba(255, 255, 255, 0.08);
+            --cyan: #00d4ff;
+            --green: #00e676;
+            --red: #ff3b5c;
+            --yellow: #ffd60a;
+            --muted: #64748b;
+            --text: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            width: 340px;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', -apple-system, sans-serif;
+            user-select: none;
+        }
+
+        /* ── Header ── */
+        .header {
+            background: linear-gradient(135deg, #0d1425 0%, #111827 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 34px;
+            height: 34px;
+            background: linear-gradient(135deg, var(--cyan), #6c63ff);
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .logo-text {
+            font-weight: 800;
+            font-size: 1rem;
+            letter-spacing: -0.3px;
+            color: #fff;
+        }
+
+        .logo-sub {
+            font-size: 0.65rem;
+            color: var(--muted);
+            margin-top: 1px;
+        }
+
+        .ai-badge {
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 3px 8px;
+            border-radius: 100px;
+            background: rgba(0, 212, 255, 0.12);
+            color: var(--cyan);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        /* ── Main body ── */
+        .body {
+            padding: 18px;
+        }
+
+        /* Gauge */
+        .gauge-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .gauge-wrap {
+            position: relative;
+            width: 130px;
+            height: 130px;
+        }
+
+        .gauge-wrap svg {
+            overflow: visible;
+        }
+
+        .g-bg {
+            fill: none;
+            stroke: var(--card2);
+            stroke-width: 10;
+        }
+
+        .g-fill {
+            fill: none;
+            stroke-width: 10;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.4s;
+        }
+
+        .gauge-center {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .g-score {
+            font-size: 2rem;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .g-unit {
+            font-size: 0.65rem;
+            color: var(--muted);
+        }
+
+        .g-label {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .g-label.safe {
+            color: var(--green);
+        }
+
+        .g-label.danger {
+            color: var(--red);
+        }
+
+        .g-label.warning {
+            color: var(--yellow);
+        }
+
+        /* Card */
+        .info-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+        }
+
+        /* URL row */
+        .url-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.78rem;
+            color: var(--cyan);
+            font-family: monospace;
+            word-break: break-all;
+        }
+
+        .url-icon {
+            opacity: 0.5;
+            flex-shrink: 0;
+            font-size: 13px;
+        }
+
+        /* Reasons */
+        .reasons-title {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+
+        .reason-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 8px 10px;
+            background: var(--card2);
+            border-radius: 8px;
+            margin-bottom: 6px;
+            font-size: 0.78rem;
+            color: var(--text);
+            line-height: 1.4;
+            animation: slideIn 0.3s ease both;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+        }
+
+        .r-ic {
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            background: rgba(255, 59, 92, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            flex-shrink: 0;
+        }
+
+        /* Clean */
+        .clean-box {
+            text-align: center;
+            padding: 16px 10px;
+            background: linear-gradient(135deg, rgba(0, 230, 118, 0.06), rgba(0, 212, 255, 0.03));
+            border: 1px solid rgba(0, 230, 118, 0.15);
+            border-radius: 12px;
+        }
+
+        .clean-box .ci {
+            font-size: 1.8rem;
+            margin-bottom: 6px;
+        }
+
+        .clean-box p {
+            font-size: 0.78rem;
+            color: var(--green);
+            font-weight: 700;
+        }
+
+        .clean-box span {
+            display: block;
+            font-size: 0.7rem;
+            color: var(--muted);
+            margin-top: 3px;
+        }
+
+        /* Loading */
+        #popupLoading {
+            text-align: center;
+            padding: 30px 0;
+        }
+
+        .spin {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 12px;
+            border: 3px solid transparent;
+            border-top-color: var(--cyan);
+            border-right-color: #6c63ff;
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .spin-txt {
+            font-size: 0.78rem;
+            color: var(--muted);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 10px 18px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .hostname-pill {
+            background: var(--card2);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            padding: 4px 12px;
+            font-size: 0.7rem;
+            font-family: monospace;
+            color: var(--muted);
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .open-dash {
+            font-size: 0.68rem;
+            color: var(--cyan);
+            text-decoration: none;
+            font-weight: 600;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        .open-dash:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="logo-row">
+            <div class="logo-icon">🛡</div>
+            <div>
+                <div class="logo-text">PhishGuard</div>
+                <div class="logo-sub">Real-time AI Protection</div>
+            </div>
+        </div>
+        <span class="ai-badge">AI</span>
+    </div>
+
+    <!-- Body -->
+    <div class="body">
+
+        <!-- Loading -->
+        <div id="popupLoading">
+            <div class="spin"></div>
+            <div class="spin-txt">Scanning current page…</div>
+        </div>
+
+        <!-- Result (hidden until data arrives) -->
+        <div id="popupResult" style="display:none">
+
+            <!-- Gauge -->
+            <div class="gauge-section">
+                <div class="gauge-wrap">
+                    <svg viewBox="0 0 130 130">
+                        <circle class="g-bg" cx="65" cy="65" r="50" stroke-dasharray="250" stroke-dashoffset="0"
+                            transform="rotate(135 65 65)" />
+                        <circle class="g-fill" id="pgFill" cx="65" cy="65" r="50" stroke-dasharray="314.2"
+                            stroke-dashoffset="314.2" transform="rotate(135 65 65)" stroke="var(--cyan)" />
+                    </svg>
+                    <div class="gauge-center">
+                        <div class="g-score" id="pgScore">0</div>
+                        <div class="g-unit">/ 100</div>
+                    </div>
+                </div>
+                <div class="g-label" id="pgLabel"></div>
+            </div>
+
+            <!-- URL -->
+            <div class="info-card">
+                <div class="url-row">
+                    <span class="url-icon">🔗</span>
+                    <span id="pgHostname"></span>
+                </div>
+            </div>
+
+            <!-- Threats -->
+            <div id="pgThreats">
+                <div class="reasons-title">⚠️ Detected Threats</div>
+                <div id="pgReasonsList"></div>
+            </div>
+
+            <!-- Clean -->
+            <div class="clean-box" id="pgClean" style="display:none">
+                <div class="ci">✅</div>
+                <p>No Threats Detected</p>
+                <span>This page appears safe</span>
+            </div>
+
+        </div>
+
+        <!-- Offline notice -->
+        <div id="popupOffline" style="display:none">
+            <div style="text-align:center; padding: 20px 0; font-size:0.8rem; color:var(--muted);">
+                <div style="font-size:1.6rem; margin-bottom:8px;">🔌</div>
+                Backend offline.<br />
+                <span style="color:var(--cyan)">Start the FastAPI server</span><br />
+                to enable scanning.
+            </div>
+        </div>
+
+    </div><!-- /body -->
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="hostname-pill" id="pgFooterHost">—</div>
+        <a class="open-dash" href="#" id="dashLink">Dashboard ↗</a>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000';
+
+        const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+
+        function scoreToOffset(score, circumference = 314.2, travel = 235.6) {
+            return circumference - (clamp(score, 0, 100) / 100) * travel;
+        }
+
+        function animateNumber(el, target, dur = 900) {
+            const start = performance.now();
+            const from = parseInt(el.textContent) || 0;
+            (function tick(now) {
+                const p = Math.min((now - start) / dur, 1);
+                const val = Math.round(from + (target - from) * (1 - Math.pow(1 - p, 3)));
+                el.textContent = val;
+                if (p < 1) requestAnimationFrame(tick);
+            })(performance.now());
+        }
+
+        function scoreColour(score) {
+            if (score >= 50) return 'var(--red)';
+            if (score >= 25) return 'var(--yellow)';
+            return 'var(--green)';
+        }
+
+        function reasonIcon(r) {
+            r = r.toLowerCase();
+            if (r.includes('ip')) return '🖥';
+            if (r.includes('https')) return '🔓';
+            if (r.includes('similar')) return '🎭';
+            if (r.includes('long')) return '📏';
+            if (r.includes('@')) return '@';
+            if (r.includes('subdomain')) return '🌐';
+            if (r.includes('random')) return '🎲';
+            if (r.includes('ai') || r.includes('model')) return '🤖';
+            return '⚑';
+        }
+
+        function renderResult(data, hostname) {
+            const { is_phishing, risk_score, reasons } = data;
+            const score = clamp(risk_score, 0, 100);
+
+            // Gauge
+            const fill = document.getElementById('pgFill');
+            fill.style.stroke = scoreColour(score);
+            fill.style.strokeDashoffset = scoreToOffset(score);
+            animateNumber(document.getElementById('pgScore'), score);
+
+            // Label
+            const lbl = document.getElementById('pgLabel');
+            if (is_phishing) { lbl.textContent = 'DANGER'; lbl.className = 'g-label danger'; }
+            else if (score >= 25) { lbl.textContent = 'WARNING'; lbl.className = 'g-label warning'; }
+            else { lbl.textContent = 'SAFE'; lbl.className = 'g-label safe'; }
+
+            // Hostname
+            document.getElementById('pgHostname').textContent = hostname;
+
+            // Reasons
+            const list = document.getElementById('pgReasonsList');
+            if (reasons && reasons.length > 0) {
+                document.getElementById('pgThreats').style.display = 'block';
+                document.getElementById('pgClean').style.display = 'none';
+                reasons.forEach((r, i) => {
+                    const d = document.createElement('div');
+                    d.className = 'reason-item';
+                    d.style.animationDelay = `${i * 70}ms`;
+                    d.innerHTML = `<div class="r-ic">${reasonIcon(r)}</div><div>${r}</div>`;
+                    list.appendChild(d);
+                });
+            } else {
+                document.getElementById('pgThreats').style.display = 'none';
+                document.getElementById('pgClean').style.display = 'block';
+            }
+
+            document.getElementById('popupLoading').style.display = 'none';
+            document.getElementById('popupResult').style.display = 'block';
+        }
+
+        // Main
+        chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
+            const tab = tabs[0];
+            let url, hostname;
+
+            try {
+                const parsed = new URL(tab.url);
+                url = tab.url;
+                hostname = parsed.hostname;
+            } catch {
+                document.getElementById('popupLoading').style.display = 'none';
+                document.getElementById('popupOffline').style.display = 'block';
+                return;
+            }
+
+            document.getElementById('pgFooterHost').textContent = hostname;
+            document.getElementById('dashLink').href = 'http://localhost:8000';
+
+            try {
+                const res = await fetch(`${API_BASE}/analyze`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url })
+                });
+                if (!res.ok) throw new Error('bad response');
+                const data = await res.json();
+                renderResult(data, hostname);
+            } catch {
+                document.getElementById('popupLoading').style.display = 'none';
+                document.getElementById('popupOffline').style.display = 'block';
+            }
+        });
+    </script>
+
+</body>
+
+</html>

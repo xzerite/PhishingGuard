@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PhishingGuard — Enterprise AI Phishing Detection Platform</title>
+    <meta name="description"
+        content="Enterprise-grade URL security scanner. AI-powered detection of phishing, typosquatting, domain abuse, and credential harvesting attacks in real time." />
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+    <!-- Ambient -->
+    <div class="bg-orbs" aria-hidden="true">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <div class="page">
+
+        <!-- ── NAV ──────────────────────────────────────────────── -->
+        <nav>
+            <div class="nav-logo">
+                <div class="nav-shield">🛡</div>
+                PhishingGuard
+                <span class="nav-version">v2.0</span>
+            </div>
+            <div class="nav-links">
+                <a href="#scanner">Scanner</a>
+                <a href="#how">How It Works</a>
+                <a href="#methods">Detection</a>
+                <a href="#scanner" class="nav-cta">Scan URL →</a>
+            </div>
+        </nav>
+
+        <!-- ── HERO ──────────────────────────────────────────────── -->
+        <section class="hero" id="top">
+            <div class="hero-badge">
+                <span class="dot"></span>
+                AI Engine Active · Real-Time Protection
+            </div>
+
+            <div class="hero-shield-wrap" aria-hidden="true">
+                <svg viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="shg" x1="0" y1="0" x2="110" y2="110" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#00c8f0" />
+                            <stop offset="0.5" stop-color="#7c4dff" />
+                            <stop offset="1" stop-color="#ff4060" />
+                        </linearGradient>
+                        <filter id="sglow">
+                            <feGaussianBlur stdDeviation="4" result="b" />
+                            <feMerge>
+                                <feMergeNode in="b" />
+                                <feMergeNode in="SourceGraphic" />
+                            </feMerge>
+                        </filter>
+                    </defs>
+                    <path d="M55 6 L98 24 L98 56 C98 77 78 92 55 101 C32 92 12 77 12 56 L12 24 Z" fill="url(#shg)"
+                        opacity="0.12" />
+                    <path d="M55 6 L98 24 L98 56 C98 77 78 92 55 101 C32 92 12 77 12 56 L12 24 Z" stroke="url(#shg)"
+                        stroke-width="2.5" fill="none" filter="url(#sglow)" />
+                    <!-- Inner ring -->
+                    <path d="M55 20 L84 33 L84 55 C84 70 71 81 55 88 C39 81 26 70 26 55 L26 33 Z" stroke="url(#shg)"
+                        stroke-width="1" fill="none" opacity="0.4" />
+                    <!-- Check -->
+                    <path d="M38 54 L50 66 L73 42" stroke="url(#shg)" stroke-width="4.5" stroke-linecap="round"
+                        stroke-linejoin="round" filter="url(#sglow)" />
+                    <!-- Eye detail -->
+                    <circle cx="55" cy="54" r="5" fill="url(#shg)" opacity="0.3" />
+                </svg>
+            </div>
+
+            <h1>
+                AI-Powered<br />
+                <span class="grad">Phishing Detection</span><br />
+                at Enterprise Scale
+            </h1>
+            <p class="hero-sub">
+                PhishingGuard analyses every URL through seven layers of detection — heuristics,
+                domain intelligence, entropy analysis, typosquatting fingerprinting, and a trained
+                ML model — delivering a verdict in under 300ms.
+            </p>
+
+            <!-- ── SCANNER ──── -->
+            <div class="scanner-wrap" id="scanner">
+                <div class="scanner-card">
+                    <div class="input-label">🔗 &nbsp;URL to analyse</div>
+                    <div class="input-row">
+                        <input id="urlInput" class="url-input" type="url" placeholder="https://example.com/path?ref=1"
+                            autocomplete="off" spellcheck="false" />
+                        <button id="scanBtn" class="scan-btn">
+                            <span class="bi">⚡</span> Scan URL
+                        </button>
+                    </div>
+                    <div class="scanner-meta">
+                        <div class="s-meta-item"><span class="si">🔒</span> TLS-secured analysis</div>
+                        <div class="s-meta-item"><span class="si">⚡</span> &lt;300ms response</div>
+                        <div class="s-meta-item"><span class="si">🧠</span> ML + heuristics</div>
+                        <div class="s-meta-item"><span class="si">🌐</span> 7 detection layers</div>
+                    </div>
+                    <div id="errorBanner" class="error-banner"><span>⛔</span><span id="errorText">Something went
+                            wrong.</span></div>
+                    <div id="offlineBanner" class="offline-banner"><span>⚠️</span><span>Backend offline — showing
+                            client-side demo result. Start the FastAPI server for live analysis.</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── LOADING ────────────────────────────────────────────── -->
+        <div id="loading">
+            <div class="loader-ring"></div>
+            <div class="loading-phase" id="loadingPhase">Initialising analysis engine…</div>
+            <div class="loading-url" id="loadingUrl"></div>
+        </div>
+
+        <!-- ── RESULTS ────────────────────────────────────────────── -->
+        <section id="results">
+
+            <!-- URL banner -->
+            <div class="url-banner">
+                <div class="ub-left">
+                    <span class="ub-icon">🔗</span>
+                    <span class="ub-url" id="resUrl"></span>
+                </div>
+                <span class="ub-time" id="resTime"></span>
+            </div>
+
+            <!-- Verdict + Gauge -->
+            <div class="results-top">
+                <div class="verdict-card" id="verdictCard">
+                    <div class="verdict-top">
+                        <div class="verdict-icon-wrap" id="verdictIcon"></div>
+                        <span class="verdict-chip" id="verdictChip"></span>
+                    </div>
+                    <div>
+                        <div class="verdict-headline" id="verdictHeadline"></div>
+                        <div class="verdict-desc" id="verdictDesc"></div>
+                    </div>
+                    <div class="verdict-meta">
+                        <div class="vm-item">
+                            <div class="vm-val" id="vmScore">—</div>
+                            <div class="vm-key">Risk Score</div>
+                        </div>
+                        <div class="vm-item">
+                            <div class="vm-val" id="vmFlags">—</div>
+                            <div class="vm-key">Signals</div>
+                        </div>
+                        <div class="vm-item">
+                            <div class="vm-val" id="vmTime">—</div>
+                            <div class="vm-key">Scan Time</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gauge-card">
+                    <div class="gauge-card-title">Risk Score</div>
+                    <div class="gauge-wrap">
+                        <svg viewBox="0 0 148 148">
+                            <circle class="g-track" cx="74" cy="74" r="56" stroke-dasharray="264" stroke-dashoffset="0"
+                                transform="rotate(135 74 74)" />
+                            <circle class="g-arc" id="gaugeFill" cx="74" cy="74" r="56" stroke-dasharray="351.9"
+                                stroke-dashoffset="351.9" transform="rotate(135 74 74)" stroke="var(--cyan)" />
+                        </svg>
+                        <div class="gauge-center">
+                            <div class="g-num" id="gaugeNum">0</div>
+                            <div class="g-den">/ 100</div>
+                        </div>
+                    </div>
+                    <div class="gauge-label" id="gaugeLabel">Awaiting scan</div>
+                </div>
+            </div>
+
+            <!-- Scan stats bar -->
+            <div class="scan-stats">
+                <div class="ss-card">
+                    <div class="ss-val ss-grad" id="ssScore">—</div>
+                    <div class="ss-label">Risk Score</div>
+                </div>
+                <div class="ss-card">
+                    <div class="ss-val ss-grad" id="ssFlags">—</div>
+                    <div class="ss-label">Threat Signals</div>
+                </div>
+                <div class="ss-card">
+                    <div class="ss-val ss-grad" id="ssChecks">7</div>
+                    <div class="ss-label">Checks Run</div>
+                </div>
+                <div class="ss-card">
+                    <div class="ss-val ss-grad" id="ssVerdict">—</div>
+                    <div class="ss-label">Verdict</div>
+                </div>
+            </div>
+
+            <!-- Details grid: checks + threats -->
+            <div class="details-grid">
+
+                <!-- Check breakdown -->
+                <div class="check-card">
+                    <div class="check-card-title">🔬 &nbsp;Security Checks Breakdown</div>
+                    <div id="checkRows">
+                        <!-- injected by JS -->
+                    </div>
+                </div>
+
+                <!-- Threats / clean -->
+                <div class="threats-card" id="threatsCard">
+                    <div class="threats-card-title">⚠️ &nbsp;Detected Threat Signals</div>
+                    <div id="threatsList"></div>
+                </div>
+
+            </div>
+
+            <!-- Clean bill (shown instead of threats when safe) -->
+            <div class="clean-card" id="cleanCard" style="display:none">
+                <div class="clean-icon">✅</div>
+                <div class="clean-title">All Security Checks Passed</div>
+                <div class="clean-desc">This URL passed all seven detection layers. No phishing signals, typosquatting
+                    patterns, or suspicious characteristics were detected.</div>
+                <div class="clean-checks">
+                    <span class="clean-check">✓ Domain verified</span>
+                    <span class="clean-check">✓ HTTPS secure</span>
+                    <span class="clean-check">✓ No impersonation</span>
+                    <span class="clean-check">✓ Normal entropy</span>
+                    <span class="clean-check">✓ AI cleared</span>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ── HOW IT WORKS ───────────────────────────────────────── -->
+        <section class="how-section" id="how">
+            <div class="section-header">
+                <div class="section-eyebrow">How It Works</div>
+                <h2>Seven-Layer Detection Pipeline</h2>
+                <p>Every URL is passed through a multi-stage analysis pipeline combining rule-based heuristics with a
+                    trained machine learning model.</p>
+            </div>
+            <div class="how-steps">
+                <div class="how-step">
+                    <div class="hs-num">Step 01</div>
+                    <div class="hs-icon">📥</div>
+                    <div class="hs-title">Input Parsing</div>
+                    <div class="hs-desc">The URL is parsed into its constituent parts — scheme, domain, subdomain, path,
+                        query, and fragment — for isolated analysis of each component.</div>
+                </div>
+                <div class="how-step">
+                    <div class="hs-num">Step 02</div>
+                    <div class="hs-icon" style="background:var(--red-dim)">🎭</div>
+                    <div class="hs-title">Domain Intelligence</div>
+                    <div class="hs-desc">Levenshtein distance is computed against 100+ top brand domains to detect
+                        typosquatting and visual impersonation attacks.</div>
+                </div>
+                <div class="how-step">
+                    <div class="hs-num">Step 03</div>
+                    <div class="hs-icon" style="background:var(--yellow-dim)">📐</div>
+                    <div class="hs-title">Heuristic Engine</div>
+                    <div class="hs-desc">Rule-based checks flag IP-literal URLs, excessive subdomains, suspicious
+                        symbols (@), missing HTTPS, and abnormal URL length.</div>
+                </div>
+                <div class="how-step">
+                    <div class="hs-num">Step 04</div>
+                    <div class="hs-icon" style="background:var(--green-dim)">🧠</div>
+                    <div class="hs-title">ML Scoring</div>
+                    <div class="hs-desc">A trained model evaluates a feature vector extracted from the URL and outputs a
+                        phishing probability score from 0 to 1.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── DETECTION METHODS ──────────────────────────────────── -->
+        <section class="methods-section" id="methods">
+            <div class="section-header">
+                <div class="section-eyebrow">Detection Capabilities</div>
+                <h2>What PhishingGuard Catches</h2>
+                <p>Comprehensive coverage of the most common and sophisticated URL-based attack vectors.</p>
+            </div>
+            <div class="methods-grid">
+                <div class="method-card">
+                    <div class="mc-icon" style="background:var(--red-dim)">🎭</div>
+                    <div class="mc-body">
+                        <h3>Typosquatting &amp; Brand Impersonation</h3>
+                        <p>Detects domains with small character changes (e.g. paypa<strong>1</strong>.com,
+                            g<strong>00</strong>gle.com) designed to impersonate trusted brands. Uses Levenshtein
+                            edit-distance analysis.</p>
+                        <span class="mc-tag">Levenshtein Distance</span>
+                    </div>
+                </div>
+                <div class="method-card">
+                    <div class="mc-icon" style="background:var(--yellow-dim)">🖥</div>
+                    <div class="mc-body">
+                        <h3>IP-Address URLs</h3>
+                        <p>Flags URLs using raw IP addresses in place of domain names — a strong phishing indicator used
+                            to bypass domain-based blacklists.</p>
+                        <span class="mc-tag">Pattern Matching</span>
+                    </div>
+                </div>
+                <div class="method-card">
+                    <div class="mc-icon" style="background:var(--cyan-dim)">🔓</div>
+                    <div class="mc-body">
+                        <h3>Insecure Connections</h3>
+                        <p>Warns when a URL uses HTTP instead of HTTPS. Phishing pages frequently skip TLS certificates
+                            to avoid cost and detection.</p>
+                        <span class="mc-tag">Protocol Check</span>
+                    </div>
+                </div>
+                <div class="method-card">
+                    <div class="mc-icon" style="background:rgba(124,77,255,0.12)">🎲</div>
+                    <div class="mc-body">
+                        <h3>High-Entropy Domains</h3>
+                        <p>Calculates Shannon entropy of the domain string. Auto-generated malicious domains (e.g. DGA
+                            malware) exhibit unusually high entropy values.</p>
+                        <span class="mc-tag">Shannon Entropy</span>
+                    </div>
+                </div>
+                <div class="method-card">
+                    <div class="mc-icon" style="background:var(--green-dim)">🤖</div>
+                    <div class="mc-body">
+                        <h3>Machine Learning Model</h3>
+                        <p>A trained classifier analyses a four-dimensional feature vector — URL length, HTTPS presence,
+                            simulated domain age, and form density — to compute a raw phishing probability.</p>
+                        <span class="mc-tag">Sigmoid Classifier</span>
+                    </div>
+                </div>
+                <div class="method-card">
+                    <div class="mc-icon" style="background:var(--red-dim)">🌐</div>
+                    <div class="mc-body">
+                        <h3>Subdomain Abuse</h3>
+                        <p>Excessive subdomain chaining (e.g. secure.login.verify.bank.com) is a common technique to
+                            place a trusted-looking term at the front of a malicious domain.</p>
+                        <span class="mc-tag">Structure Analysis</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── PLATFORM STATS ─────────────────────────────────────── -->
+        <section class="stats-section">
+            <div class="section-header">
+                <div class="section-eyebrow">Platform Performance</div>
+                <h2>Built for Accuracy</h2>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-num">&lt;300ms</div>
+                    <div class="stat-label">Average Scan Time</div>
+                    <div class="stat-sub">URL parsing to verdict</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num">7</div>
+                    <div class="stat-label">Detection Layers</div>
+                    <div class="stat-sub">Stacked heuristics + AI</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num">100+</div>
+                    <div class="stat-label">Brand Domains Monitored</div>
+                    <div class="stat-sub">Typosquatting protection</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── FOOTER ─────────────────────────────────────────────── -->
+        <footer>
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <div class="fl-icon">🛡</div>
+                        PhishingGuard
+                    </div>
+                    <p>AI-powered phishing detection platform. Real-time URL analysis using layered heuristics and
+                        machine learning to keep you and your organisation safe online.</p>
+                </div>
+                <div class="footer-col">
+                    <div class="footer-col-title">Product</div>
+                    <a href="#scanner">URL Scanner</a>
+                    <a href="#how">How It Works</a>
+                    <a href="#methods">Detection Engine</a>
+                    <a href="#top">Browser Extension</a>
+                </div>
+                <div class="footer-col">
+                    <div class="footer-col-title">Technology</div>
+                    <a href="#">FastAPI Backend</a>
+                    <a href="#">ML Model</a>
+                    <a href="#">Heuristic Engine</a>
+                    <a href="#">REST API v1</a>
+                </div>
+                <div class="footer-col">
+                    <div class="footer-col-title">Resources</div>
+                    <a href="#">API Reference</a>
+                    <a href="#">Source Code</a>
+                    <a href="#">Threat Database</a>
+                    <a href="#">Changelog</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>© 2025 PhishingGuard. All rights reserved.</span>
+                <span class="footer-status-dot"><span class="fsd-dot"></span> All systems operational</span>
+                <div class="footer-bottom-links">
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                    <a href="#">Security</a>
+                </div>
+            </div>
+        </footer>
+
+    </div><!-- /page -->
+    <script src="app.js"></script>
+</body>
+
+</html>
